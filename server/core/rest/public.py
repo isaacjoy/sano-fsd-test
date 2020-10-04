@@ -20,7 +20,16 @@ from core.config import config
 logger = logging.getLogger(__name__)
 public_api = Blueprint("public_api", __name__)
 
+from core.models import Studies
+from playhouse.shortcuts import model_to_dict
+
 
 # -------
 # Write you endpoint to retrieve all available studies here.
 # -------
+
+@public_api.route("/studies", methods=["GET"])
+def get_studies():
+    studies = Studies.select()
+    studies = [model_to_dict(study) for study in studies]
+    return jsonify(studies), 200
